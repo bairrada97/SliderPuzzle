@@ -1,15 +1,19 @@
 <template>
-  <li :style="{ backgroundImage: `url(${image})` }"></li>
+  <li :style="{ backgroundImage: `url(${piece.img})`,  backgroundPosition: `${piece.pos.left}px ${piece.pos.top}px`}"></li>
 </template>
 
 <script>
 export default {
   name: 'Piece',
-  props: [''],
+  props: ['piece', 'board'],
   data(){
     return{
-      image: this.$store.state.image
+    
     }
+  },
+  mounted(){
+    const item = document.querySelectorAll('li');
+    this.board[item.length - 1].img = "";
   }
 }
 </script>
