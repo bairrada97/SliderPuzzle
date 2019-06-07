@@ -1,5 +1,5 @@
 <template>
-<li :class="{win: win}" class="item" :style="{ backgroundImage: `url(${piece.img})`,  backgroundPosition: `${piece.pos.left}px ${piece.pos.top}px`, backgroundSize: `${width}px ${height}px`}"><span>{{piece.id}}</span></li>
+<li :class="{win: win}" class="item" :style="{ backgroundImage: `url(${piece.img})`,  backgroundPosition: `${piece.pos.left}px ${piece.pos.top}px`, backgroundSize: `${width}px ${height}px`}"></li>
 </template>
 
 <script>

@@ -15,7 +15,7 @@
     <h2 v-if="win" class="grid__title">Congratulations!</h2>
     <div class="grid__preview">
       <p class="grid__previewCopy">Preview Image</p>
-      <img class="grid__previewImg" :src="img" alt="">
+      <img class="grid__previewImg" :src="this.shuffleImg" alt="">
     </div>
   </div>
 
@@ -37,7 +37,7 @@ export default {
       board: [],
       moves: 0,
       win: false,
-      img: '/../assets/neve.png',
+      img: ['/../assets/img1.png','/../assets/img2.png','/../assets/img3.png','/../assets/img4.png'],
       gridHeight: 0,
       gridWidth: 0
 
@@ -85,7 +85,7 @@ export default {
           x: x,
           y: y,
           id: r,
-          img: this.img,
+          img: this.shuffleImg,
           pos: {
             left: (widthPiece * y * -1),
             top: (widthPiece * x * -1),
@@ -169,6 +169,11 @@ export default {
         this.gridHeight = height;
         this.gridWidth = width;
       }, 100);
+    }
+  },
+  computed:{
+    shuffleImg(){
+      return this.img[Math.floor(Math.random() * this.img.length)]
     }
   }
 
