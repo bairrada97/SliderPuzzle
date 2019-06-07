@@ -14,7 +14,6 @@
     </div>
     <h2 v-if="win" class="grid__title">Congratulations!</h2>
     <div class="grid__preview">
-      <p class="grid__previewCopy">Preview Image</p>
       <img class="grid__previewImg" :src="this.shuffleImg" alt="">
     </div>
   </div>
@@ -37,7 +36,7 @@ export default {
       board: [],
       moves: 0,
       win: false,
-      img: ['/../assets/img1.png','/../assets/img2.png','/../assets/img3.png','/../assets/img4.png'],
+      img: ['/../assets/img1.png', '/../assets/img2.png', '/../assets/img3.png', '/../assets/img4.png'],
       gridHeight: 0,
       gridWidth: 0
 
@@ -48,6 +47,8 @@ export default {
     this.renderBoard();
     this.shuffle(this.board);
     this.loadImage();
+    const height = (this.$refs.grid.clientWidth - '40') / this.rowSize ;
+    this.$refs.grid.style.gridTemplateRows = `repeat(4, ${height}px)`;
   },
   methods: {
     clickPiece(target, index) {
@@ -171,8 +172,8 @@ export default {
       }, 100);
     }
   },
-  computed:{
-    shuffleImg(){
+  computed: {
+    shuffleImg() {
       return this.img[Math.floor(Math.random() * this.img.length)]
     }
   }
@@ -206,6 +207,7 @@ $white-bg-color: #fff;
         justify-content: space-between;
         flex-direction: column;
         height: 500px;
+        width: 250px;
         margin-left: 60px;
         padding: 20px;
         background: $white-bg-color;
@@ -216,6 +218,7 @@ $white-bg-color: #fff;
             max-width: 500px;
             margin-left: 0;
             margin-top: 30px;
+            flex-direction: column-reverse;
         }
 
     }
@@ -225,7 +228,7 @@ $white-bg-color: #fff;
 
         @media screen and (max-width: 874px) {
             width: 100%;
-            margin-bottom: 30px;
+            margin-top: 30px;
         }
     }
 
@@ -284,13 +287,18 @@ $white-bg-color: #fff;
         }
     }
 
-    &__previewCopy {
-        font-size: 12px;
-        margin-bottom: 5%;
+    &__preview {
+      @media screen and (max-width: 874px) {
+          text-align: center;
+      }
     }
 
     &__previewImg {
-        width: 150px;
+        width: 100%;
+
+        @media screen and (max-width: 874px) {
+            width: 70%;
+        }
     }
 }
 </style>

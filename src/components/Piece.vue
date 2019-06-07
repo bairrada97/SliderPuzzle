@@ -22,15 +22,12 @@ export default {
 <style scoped lang="scss">
 .item {
     color: rgba(255,255,255,0.8);
-    height: 125px;
     padding-left: 10px;
     font-weight: 700;
     padding-top: 10px;
     box-sizing: border-box;
     font-size: 18px;
-    text-shadow: 0 0 30px rgba(0,0,0,0.8);
-    box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.5);
-
+    
     &.win{
       text-shadow: none;
       box-shadow: none;
