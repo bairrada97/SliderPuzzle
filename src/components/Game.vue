@@ -1,6 +1,5 @@
 <template>
-<div class="grid">
-
+<div class="grid" ref="gridContainer">
   <ul class="grid__gridItem" ref="grid">
     <Piece ref="item" @click.native="clickPiece(piece, index)" v-for="(piece, index) in board" :key="index" :piece="piece" :board="board" :width="gridWidth" :height="gridHeight" :win="win" />
   </ul>
@@ -12,7 +11,14 @@
       </div>
       <button type="button" name="button" @click="resetBoard" class="grid__resetBoard">Reset Game</button>
     </div>
-    <h2 v-if="win" class="grid__title">Congratulations!</h2>
+    <div class="grid__win" v-if="win" ref="winContainer">
+      <div class="grid__winContainer">
+        <span class="grid__winClose" @click="closeWin">X</span>
+        <h2 class="grid__title">Congratulations!</h2>
+        <button @click="playAgain" type="button" name="button" class="grid__winButton">Play Again</button>
+      </div>
+    </div>
+
     <div class="grid__preview">
       <img class="grid__previewImg" :src="this.shuffleImg" alt="">
     </div>
@@ -35,8 +41,8 @@ export default {
       rowSize: 4,
       board: [],
       moves: 0,
-      win: false,
-      img: ['/../assets/img1.png', '/../assets/img2.png', '/../assets/img3.png', '/../assets/img4.png'],
+      win: true,
+      img: ['/../assets/img1.png', '/../assets/img2.png', '/../assets/img3.png', '/../assets/img4.png', '/../assets/img5.png', '/../assets/img6.png', '/../assets/img7.png', '/../assets/img8.png'],
       gridHeight: 0,
       gridWidth: 0
 
@@ -44,11 +50,13 @@ export default {
   },
 
   mounted() {
+
     this.renderBoard();
     this.shuffle(this.board);
     this.loadImage();
-    const height = (this.$refs.grid.clientWidth - '40') / this.rowSize ;
+    const height = (this.$refs.grid.clientWidth - '40') / this.rowSize;
     this.$refs.grid.style.gridTemplateRows = `repeat(4, ${height}px)`;
+
   },
   methods: {
     clickPiece(target, index) {
@@ -135,6 +143,7 @@ export default {
         if (this.board[i].id === i) continue
         else return
       }
+      document.querySelector('body').style.overflow = 'hidden';
       this.win = true;
     },
     checkPosition(direction, index) {
@@ -169,7 +178,21 @@ export default {
         clearInterval(loadImage);
         this.gridHeight = height - '40';
         this.gridWidth = width - '40';
+
       }, 100);
+    },
+    playAgain() {
+      this.board = [];
+      this.renderBoard();
+      this.shuffle(this.board);
+      this.loadImage();
+      const height = (this.$refs.grid.clientWidth - '40') / this.rowSize;
+      this.$refs.grid.style.gridTemplateRows = `repeat(4, ${height}px)`;
+      document.querySelector('body').style.overflow = 'auto';
+      this.win = false;
+    },
+    closeWin() {
+      this.win = false;
     }
   },
   computed: {
@@ -199,6 +222,7 @@ $white-bg-color: #fff;
         font-weight: bold;
         text-transform: uppercase;
         color: $main-bg-color;
+
     }
 
     &__sideBar {
@@ -288,9 +312,9 @@ $white-bg-color: #fff;
     }
 
     &__preview {
-      @media screen and (max-width: 874px) {
-          text-align: center;
-      }
+        @media screen and (max-width: 874px) {
+            text-align: center;
+        }
     }
 
     &__previewImg {
@@ -299,6 +323,59 @@ $white-bg-color: #fff;
         @media screen and (max-width: 874px) {
             width: 70%;
         }
+    }
+
+    &__win {
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+    }
+
+    &__winContainer {
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: $white-bg-color;
+        width: calc(500px - 40px);
+        height: 40%;
+        box-shadow: 0 0 30px rgba(0,0,0, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        @media screen and (max-width: 874px) {
+            width: calc(100% - 40px);
+        }
+
+    }
+
+    &__winButton {
+        @extend .grid__resetBoard;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    &__winClose {
+        font-size: 20px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 20px;
+
+        color: $main-bg-color;
+
+        @media screen and (max-width: 874px) {
+            padding: 10%;
+        }
+
     }
 }
 </style>
