@@ -19,7 +19,12 @@ export default {
 <style lang="scss">
 @import '@/styles/reset.scss';
 
+body{
+  @media screen and (max-width: 874px) {
+      overflow: auto;
 
+  }
+}
 
 #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -29,7 +34,10 @@ export default {
     justify-content: center;
     background: #f7f7f7;
 
-    
+    @media screen and (max-width: 874px) {
+        height: auto;
+
+    }
 
 
 }

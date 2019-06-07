@@ -51,7 +51,10 @@ export default {
   },
   methods: {
     clickPiece(target, index) {
-      const {x,y} = target;
+      const {
+        x,
+        y
+      } = target;
 
       //check if there is a piece with Image on top, left, right or bottom, if there is a "next" piece with no image the target goes there
 
@@ -72,7 +75,7 @@ export default {
       const widthGrid = this.$refs.grid.clientWidth,
         widthPiece = widthGrid / this.rowSize;
 
-        //render board, each piece will have the properties below
+      //render board, each piece will have the properties below
 
       for (let r = 0; r < this.size; r++) {
         let x = Math.floor(r / this.rowSize),
@@ -106,7 +109,7 @@ export default {
         tempPos, index, tempID
 
 
-        //shuffle the game, and swap only background position and ID;
+      //shuffle the game, and swap only background position and ID;
 
       while (counter > 0) {
 
@@ -174,7 +177,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style  lang="scss">
-
 $main-bg-color: #5e5eff;
 $white-bg-color: #fff;
 
@@ -182,6 +184,8 @@ $white-bg-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
 
     &__title {
         font-size: 20px;
@@ -201,10 +205,23 @@ $white-bg-color: #fff;
         padding: 20px;
         background: $white-bg-color;
 
+        @media screen and (max-width: 874px) {
+            height: auto;
+            width: 100%;
+            max-width: 500px;
+            margin-left: 0;
+            margin-top: 30px;
+        }
+
     }
 
     &__left {
         display: flex;
+
+        @media screen and (max-width: 874px) {
+            width: 100%;
+            margin-bottom: 30px;
+        }
     }
 
     &__moves {
@@ -228,9 +245,10 @@ $white-bg-color: #fff;
     &__gridItem {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        width: 500px;
+        width: 100%;
         background: $white-bg-color;
         padding: 20px;
+        max-width: 500px;
 
     }
 
@@ -254,6 +272,10 @@ $white-bg-color: #fff;
             background: $main-bg-color;
             color: $white-bg-color;
 
+        }
+
+        @media screen and (max-width: 874px) {
+            margin-left: auto;
         }
     }
 
