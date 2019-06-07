@@ -13,7 +13,8 @@
     </div>
     <div class="grid__win" v-if="win" ref="winContainer">
       <div class="grid__winContainer">
-        <span class="grid__winClose" @click="closeWin">X</span>
+        <img src="/../assets/cross.svg" alt="" class="grid__winClose" @click="closeWin">
+
         <h2 class="grid__title">Congratulations!</h2>
         <button @click="playAgain" type="button" name="button" class="grid__winButton">Play Again</button>
       </div>
@@ -50,7 +51,6 @@ export default {
   },
 
   mounted() {
-
     this.renderBoard();
     this.shuffle(this.board);
     this.loadImage();
@@ -182,10 +182,12 @@ export default {
       }, 100);
     },
     playAgain() {
+      const item = this.$refs.item;
       this.board = [];
       this.renderBoard();
       this.shuffle(this.board);
       this.loadImage();
+      this.board[item.length - 1].img = "";
       const height = (this.$refs.grid.clientWidth - '40') / this.rowSize;
       this.$refs.grid.style.gridTemplateRows = `repeat(4, ${height}px)`;
       document.querySelector('body').style.overflow = 'auto';
@@ -369,6 +371,7 @@ $white-bg-color: #fff;
         top: 0;
         right: 0;
         padding: 20px;
+        width: 30px;
 
         color: $main-bg-color;
 
