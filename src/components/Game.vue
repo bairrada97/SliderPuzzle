@@ -167,8 +167,8 @@ export default {
         const height = this.$refs.grid.clientHeight,
           width = this.$refs.grid.clientWidth;
         clearInterval(loadImage);
-        this.gridHeight = height;
-        this.gridWidth = width;
+        this.gridHeight = height - '40';
+        this.gridWidth = width - '40';
       }, 100);
     }
   },
