@@ -1,0 +1,269 @@
+<template>
+<div class="grid">
+
+  <ul class="grid__gridItem" ref="grid">
+    <Piece ref="item" @click.native="clickPiece(piece, index)" v-for="(piece, index) in board" :key="index" :piece="piece" :board="board" :width="gridWidth" :height="gridHeight" :win="win" />
+  </ul>
+  <div class="grid__sideBar">
+    <div class="grid__left">
+      <div class="grid__moves">
+        <h2>Moves</h2>
+        <p>{{moves}}</p>
+      </div>
+      <button type="button" name="button" @click="resetBoard" class="grid__resetBoard">Reset Game</button>
+    </div>
+    <h2 v-if="win" class="grid__title">Congratulations!</h2>
+    <div class="grid__preview">
+      <p class="grid__previewCopy">Preview Image</p>
+      <img class="grid__previewImg" :src="img" alt="">
+    </div>
+  </div>
+
+</div>
+</template>
+
+<script>
+import Piece from '@/components/Piece.vue';
+export default {
+  name: 'Game',
+  props: [''],
+  components: {
+    Piece
+  },
+  data() {
+    return {
+      size: 16,
+      rowSize: 4,
+      board: [],
+      moves: 0,
+      win: false,
+      img: '/../assets/neve.png',
+      gridHeight: 0,
+      gridWidth: 0
+
+    }
+  },
+
+  mounted() {
+    this.renderBoard();
+    this.shuffle(this.board);
+    this.loadImage();
+  },
+  methods: {
+    clickPiece(target, index) {
+      const {x,y} = target;
+
+      //check if there is a piece with Image on top, left, right or bottom, if there is a "next" piece with no image the target goes there
+
+      const left = this.board.find(piece => piece.x === x && piece.y === y - 1);
+      if (this.isInBounds(left)) this.checkPosition(left, index);
+
+      const top = this.board.find(piece => piece.x === x - 1 && piece.y === y);
+      if (this.isInBounds(top)) this.checkPosition(top, index);
+
+      const right = this.board.find(piece => piece.x === x && piece.y === y + 1);
+      if (this.isInBounds(right)) this.checkPosition(right, index);
+
+      const bottom = this.board.find(piece => piece.x === x + 1 && piece.y === y);
+      if (this.isInBounds(bottom)) this.checkPosition(bottom, index);
+
+    },
+    renderBoard() {
+      const widthGrid = this.$refs.grid.clientWidth,
+        widthPiece = widthGrid / this.rowSize;
+
+        //render board, each piece will have the properties below
+
+      for (let r = 0; r < this.size; r++) {
+        let x = Math.floor(r / this.rowSize),
+          y = r - (Math.floor(r / this.rowSize) * this.rowSize);
+
+        this.board.push({
+          x: x,
+          y: y,
+          id: r,
+          img: this.img,
+          pos: {
+            left: (widthPiece * y * -1),
+            top: (widthPiece * x * -1),
+          }
+        });
+      }
+
+
+
+    },
+    isInBounds(target) {
+      if (target != undefined) {
+        return (target.x >= 0 && target.x <= this.board.length - 1) && (target.y >= 0 && target.y <= this.board.length - 1)
+      } else {
+        return false
+      }
+
+    },
+    shuffle(board) {
+      let counter = board.length - 1,
+        tempPos, index, tempID
+
+
+        //shuffle the game, and swap only background position and ID;
+
+      while (counter > 0) {
+
+        index = Math.floor(Math.random() * counter);
+        counter--;
+
+        tempPos = board[counter].pos;
+        board[counter].pos = board[index].pos;
+        board[index].pos = tempPos;
+
+        tempID = board[counter].id;
+        board[counter].id = board[index].id;
+        board[index].id = tempID;
+
+      }
+      return board;
+    },
+    winCondition() {
+
+      //if the all of pieces ID match with index, win
+      for (var i = 0; i < this.board.length; i++) {
+        if (this.board[i].id === i) continue
+        else return
+      }
+      this.win = true;
+    },
+    checkPosition(direction, index) {
+      //if the next position dont has image, swap background position and ID with the target
+
+      if (!direction.img) {
+        let id = direction.id;
+        direction.img = this.board[index].img;
+        direction.pos = this.board[index].pos;
+        direction.id = this.board[index].id;
+        this.board[index].id = id;
+        this.board[index].img = "";
+        this.moves++;
+        this.winCondition();
+
+      }
+    },
+    resetBoard() {
+      const item = this.$refs.item;
+      this.board = [];
+      this.moves = 0;
+      this.win = false;
+      this.renderBoard();
+      this.shuffle(this.board);
+      this.board[item.length - 1].img = "";
+    },
+    loadImage() {
+      //Since images render after the lifecycle is done I did a setInterval to get the width and height of the grid, to use as background size of each piece
+      const loadImage = setInterval(() => {
+        const height = this.$refs.grid.clientHeight,
+          width = this.$refs.grid.clientWidth;
+        clearInterval(loadImage);
+        this.gridHeight = height;
+        this.gridWidth = width;
+      }, 100);
+    }
+  }
+
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style  lang="scss">
+
+$main-bg-color: #5e5eff;
+$white-bg-color: #fff;
+
+.grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__title {
+        font-size: 20px;
+        margin-bottom: 30px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: $main-bg-color;
+    }
+
+    &__sideBar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: column;
+        height: 500px;
+        margin-left: 60px;
+        padding: 20px;
+        background: $white-bg-color;
+
+    }
+
+    &__left {
+        display: flex;
+    }
+
+    &__moves {
+        text-align: right;
+        font-size: 20px;
+        color: $main-bg-color;
+        font-size: 12px;
+        text-transform: uppercase;
+        display: flex;
+        flex-direction: column;
+        margin-right: 60px;
+
+        p {
+            margin-top: 10px;
+            text-align: left;
+            font-size: 30px;
+            color: #d3d2e4;
+        }
+    }
+
+    &__gridItem {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        width: 500px;
+        background: $white-bg-color;
+        padding: 20px;
+
+    }
+
+    &__resetBoard {
+        border: 0;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        border: 1px solid $main-bg-color;
+        background: $white-bg-color;
+        color: $main-bg-color;
+        text-align: center;
+        padding: 10px 20px;
+        text-transform: uppercase;
+        border-radius: 1px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border: 1px solid $main-bg-color;
+            background: $main-bg-color;
+            color: $white-bg-color;
+
+        }
+    }
+
+    &__previewCopy {
+        font-size: 12px;
+        margin-bottom: 5%;
+    }
+
+    &__previewImg {
+        width: 150px;
+    }
+}
+</style>

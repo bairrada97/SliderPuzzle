@@ -1,17 +1,17 @@
 <template>
-  <main id="app">
-    <Grid />
-  </main>
+<main id="app">
+  <Game />
+</main>
 </template>
 
 <script>
-import Grid from '@/components/Grid.vue';
+import Game from '@/components/Game.vue';
 import store from './store';
 
 export default {
   name: 'app',
   components: {
-    Grid
+    Game
   }
 }
 </script>
@@ -19,12 +19,20 @@ export default {
 <style lang="scss">
 @import '@/styles/reset.scss';
 
+
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f7f7;
+
+    
+
+
 }
+
+
 </style>
