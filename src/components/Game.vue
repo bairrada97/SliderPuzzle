@@ -74,7 +74,7 @@ export default {
     },
     renderBoard() {
       const widthGrid = this.$refs.grid.clientWidth,
-        widthPiece = widthGrid / this.rowSize;
+        widthPiece = (widthGrid - '40') / this.rowSize;
 
       //render board, each piece will have the properties below
 
@@ -88,8 +88,8 @@ export default {
           id: r,
           img: this.shuffleImg,
           pos: {
-            left: (widthPiece * y * -1) - '40',
-            top: (widthPiece * x * -1) - '40',
+            left: (widthPiece * y * -1),
+            top: (widthPiece * x * -1),
           }
         });
       }
